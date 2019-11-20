@@ -81,8 +81,6 @@ for i = 1:length(Message)
         spot = spot + 2;
     end
     Message2(i,:)= fliplr(tp(spot,:));
-    % Message3 lets you see the values in decimal like the example.
-    % Message3(i) = bi2de(Message2(i,:),'left-msb');
 end
 
 % Final Formatting.
