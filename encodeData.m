@@ -95,9 +95,6 @@ Alphanumeric = ['0';
     '/';
     ':'];
 
-
-
-
 % Match the inputed characters to the values in the Alphanumeric table.
 data = -1*ones(1,length(inputText));
 for i = 1:length(inputText)
@@ -124,7 +121,7 @@ end
 % Formate each pair of inputed character into bits using the
 % Alphanumeric Mode Encoding algorithm found at the following web page.
 % https://www.thonky.com/qr-code-tutorial/alphanumeric-mode-encoding
-encodedData = zeros(1,11*(length(data)+1)/2);
+encodedData = zeros(1,11*floor((length(data)+1)/2));
 for i = 1:2:length(data)
     first = data(i);
     if i + 1 > length(data)
