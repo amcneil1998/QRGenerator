@@ -1,4 +1,5 @@
 
+
 % This function performs all operations described in the data Analysis
 % and data encoding Portions of the QR Code Tutorial on Thonky.com
 % https://www.thonky.com/qr-code-tutorial/introduction
@@ -6,7 +7,7 @@
 % eventualy becomee embeded in the QR code.
 % The second describes the Error Correction Level.
 % Note this function assumes a version 1, 21 X 21 Alphanumeric QR code
-% The output of this function is a string array of bytes to be used in the
+% The output of this function is a double array of bytes to be used in the
 % Error Correction Coding portion of the QR Code Tutorial
 
 function [stream] = encodeData(inputText,errIn)
@@ -168,7 +169,7 @@ output = [0,0,1,0, charCount encodedData];
 % Add up to four terminator zeros at the end.
 for i = 1:4
     if length(output) < dataCodewordNum*8
-        output=[output 0];
+        output = [output 0];
     end
 end
 
@@ -186,11 +187,10 @@ while length(output) < dataCodewordNum*8
 end
 
 % Separate the bytes.
-stream = strings(1,dataCodewordNum);
+% stream = strings(1,dataCodewordNum);
+stream = -1*ones(dataCodewordNum,8);
 for i = 1:dataCodewordNum
-    stream(i) = convertCharsToStrings(strcat(int2str(output(8*(i-1)+1:8*(i)))));
+    stream(i,:) = output(8*(i-1)+1:8*(i));
 end
 
-
 end
-
