@@ -85,7 +85,7 @@ for i = 1:length(Message)
     % Message3(i) = bi2de(Message2(i,:),'left-msb');
 end
 
-% Final Formatting to a
+% Final Formatting.
 streamOut = -1*ones(1,8*26);
 streamOut(:) = Message2(:,:)';
 streamOut = num2str(streamOut(:,:)) ;
