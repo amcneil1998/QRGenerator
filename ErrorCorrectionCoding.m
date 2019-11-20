@@ -16,7 +16,7 @@ function [streamOut] = ErrorCorrectionCoding(streamIn)
 
 % Obtain the needed number of parity check symbols 
 % Use that number as the switch argument to get the generator polynomial 
-switch (26 - length(streamIn)+1)
+switch (26 - length(streamIn))
     case 7
         gen = [21 102 238 149 146 229 87 0];
         % x^7*?^(0)   + x^6*?^(87)  + x^5*?^(229) + x^4?^(146) +
