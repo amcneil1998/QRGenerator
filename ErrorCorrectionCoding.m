@@ -1,18 +1,14 @@
-
-
 % This function performs all operations described in the Error Correction 
 % Coding Portion of the QR Code Tutorial on Thonky.com
 % https://www.thonky.com/qr-code-tutorial/introduction
 % This function takes one input. The input is the 2D double array of bytes
 % containg the encoded data that is the output of the function encodeData.
 % Note this function assumes a version 1, 21 X 21 Alphanumeric QR code
-% The output of this function is a 1 X 208 chareter array of bits to be 
+% The output of this function is a 1 X 208 double array of bits to be 
 % used in the module placement portion of the QR Code Tutorial.
-
 
 % Error Correction Coding
 function [streamOut] = ErrorCorrectionCoding(streamIn)
-
 
 % Obtain the needed number of parity check symbols 
 % Use that number as the switch argument to get the generator polynomial 
@@ -86,10 +82,5 @@ end
 % Final Formatting.
 streamOut = -1*ones(1,8*26);
 streamOut(:) = Message2(:,:)';
-streamOut = num2str(streamOut(:,:)) ;
-streamOut= streamOut(~isspace(streamOut));
 
 end
-
-
-
