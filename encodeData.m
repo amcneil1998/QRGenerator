@@ -1,5 +1,3 @@
-
-
 % This function performs all operations described in the data Analysis
 % and data encoding Portions of the QR Code Tutorial on Thonky.com
 % https://www.thonky.com/qr-code-tutorial/introduction
@@ -12,6 +10,8 @@
 
 function [stream] = encodeData(inputText,errIn)
 
+inputText = convertStringsToChars(upper(inputText));
+errIn = convertStringsToChars(upper(errIn));
 
 % Determine the maximum allowable characters for the given Error
 % Correction Level. As well as the number of data codewords.
