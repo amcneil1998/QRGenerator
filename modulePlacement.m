@@ -44,12 +44,13 @@ function matrixOut = modulePlacement(inputBitString)
     k = 21;
     while k > 0
         %decrement rows
-        for j = 21:1
-            if matrixOut(j, k) == 0 && matrixOut(j, k-1) == 0
-                matrixOut(j,k) = inputBitString(i);
-                matrixOut(j,k - 1) = inputBitString(i + 1);
+        for j = 1:21
+            if matrixOut(22-j, k) == 0 && matrixOut(22-j, k-1) == 0
+                matrixOut(22-j,k) = inputBitString(i);
+                matrixOut(22-j,k - 1) = inputBitString(i + 1);
                 i = i + 2;
             end
+
         end
         %adjust k
         if k == 9

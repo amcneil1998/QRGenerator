@@ -35,7 +35,7 @@ switch errorLevel
         binaryErrorLevel = '00';
     case 'Q'
         binaryErrorLevel = '11';
-    case 'H' 
+    case 'H'
         binaryErrorLevel = '10';
 end
 
@@ -62,11 +62,11 @@ mxArray = rot90(mxArray);
 %Generator polynomial x^10 + x^8 + x^5 + x^4 + x^2 + x + 1
 gx = [1 0 1 0 0 1 1 0 1 1 1];
 %Rotate it for gfdeconv. I know...I could have declared it like that from
-%the start. 
+%the start.
 gx = rot90(gx);
 gx = rot90(gx);
 
-%Error correction polynomial. Remainder contains what we need. 
+%Error correction polynomial. Remainder contains what we need.
 [~, r] = gfdeconv(mxArray, gx);
 if r == 0
     r = [0 0 0 0 0 0 0 0 0 0];
@@ -104,12 +104,12 @@ for i = 1:1:11
     elseif (i > 7 && i < 10)
         formatCode(i, 9) = finalArray(i-1);
     elseif (i == 10)
-            formatCode(i+4, 9) = 1;
+        formatCode(i+4, 9) = 1;
     elseif (i == 11)
         for n = 1:1:7
             formatCode(14+n, 9) = finalArray(8+n);
         end
-    end      
+    end
 end
 
 temp = rot90(finalArray);
@@ -127,7 +127,7 @@ for i = 1:1:11
         for n = 1:1:8
             formatCode(9, 13+n) = temp(7+n);
         end
-    end      
+    end
 end
 
 finalMx = zeros(29, 29);
