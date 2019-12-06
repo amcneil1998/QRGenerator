@@ -1,4 +1,3 @@
-
 %This function deals with the version and format information
 %It takes in three inputs: A 2D matrix which is the QR code,
 %the error level we are using, and the mask pattern
@@ -22,7 +21,7 @@ end
 %Creates the appropriate message polynomial by converting it from doubles
 %to arrays with the binary representation.
 
-binaryMaskPattern = dec2bin(maskPattern);
+binaryMaskPattern = dec2bin(maskPattern, 3);
 errorMask = strcat(binaryErrorLevel, binaryMaskPattern);
 xp = '0000000000';
 mx = strcat(errorMask, xp);
@@ -48,7 +47,7 @@ gx = rot90(gx);
 gx = rot90(gx);
 
 %Error correction polynomial. Remainder contains what we need. 
-[q, r] = gfdeconv(mxArray, gx);
+[~, r] = gfdeconv(mxArray, gx);
 
 %If string make into array
 versionArray = zeros(1, length(asciiArrayVersion));
@@ -110,18 +109,4 @@ end
 imagesc(formatCode)
 colormap(gray)
 
-
 end
-
-
-
-
-
-
-
-    
-
-
-
-
-
