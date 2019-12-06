@@ -1,10 +1,31 @@
+
 %This function deals with the version and format information
 %It takes in three inputs: A 2D matrix which is the QR code,
 %the error level we are using, and the mask pattern
 %I am assuming the error level is a character and the mask pattern a double
 %The output is the QR code with the format and version info.
 
-function [formatCode] = formatVersion(qrCode, errorLevel, maskPattern)
+function [finalMx] = formatVersion(qrCode, errorLevel, maskPattern)
+
+%Change maskPattern to 3 bits string
+switch maskPattern
+    case 1
+        binaryMaskPattern = '000';
+    case 2
+        binaryMaskPattern = '001';
+    case 3
+        binaryMaskPattern = '010';
+    case 4
+        binaryMaskPattern = '011';
+    case 5
+        binaryMaskPattern = '100';
+    case 6
+        binaryMaskPattern = '101';
+    case 7
+        binaryMaskPattern = '110';
+    case 8
+        binaryMaskPattern = '111';
+end
 
 %Switch statement to determine binary for errorLevel
 switch errorLevel
@@ -21,7 +42,6 @@ end
 %Creates the appropriate message polynomial by converting it from doubles
 %to arrays with the binary representation.
 
-binaryMaskPattern = dec2bin(maskPattern, 3);
 errorMask = strcat(binaryErrorLevel, binaryMaskPattern);
 xp = '0000000000';
 mx = strcat(errorMask, xp);
@@ -48,7 +68,12 @@ gx = rot90(gx);
 
 %Error correction polynomial. Remainder contains what we need. 
 [~, r] = gfdeconv(mxArray, gx);
-
+if r == 0
+    r = [0 0 0 0 0 0 0 0 0 0];
+end
+while length(r) < 10
+    r = [0, r];
+end
 %If string make into array
 versionArray = zeros(1, length(asciiArrayVersion));
 for i = 1:length(asciiArrayVersion)
@@ -104,9 +129,9 @@ for i = 1:1:11
         end
     end      
 end
- 
-%Image check, although it has to be inverted for correct colors
-imagesc(formatCode)
-colormap(gray)
 
+finalMx = zeros(29, 29);
+finalMx(5:25, 5:25) = formatCode;
+% imagesc(finalMx)
+% colormap(gray)
 end
