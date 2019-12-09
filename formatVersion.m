@@ -35,13 +35,12 @@ switch errorLevel
         binaryErrorLevel = '00';
     case 'Q'
         binaryErrorLevel = '11';
-    case 'H'
+    case 'H' 
         binaryErrorLevel = '10';
 end
 
 %Creates the appropriate message polynomial by converting it from doubles
 %to arrays with the binary representation.
-
 errorMask = strcat(binaryErrorLevel, binaryMaskPattern);
 xp = '0000000000';
 mx = strcat(errorMask, xp);
@@ -54,26 +53,48 @@ for i = 1:length(asciiArrayMx)
     mxArray(i) = sscanf(char(asciiArrayMx(i)), '%f');
 end
 
-%Rotate it to go ascending for gfdeconv
-mxArray = rot90(mxArray);
-mxArray = rot90(mxArray);
-
+%Remove the leading 0
+for i = 1:1:2
+    if mxArray(1) == 0
+        mxArray(1) = [];
+    end
+end
 
 %Generator polynomial x^10 + x^8 + x^5 + x^4 + x^2 + x + 1
 gx = [1 0 1 0 0 1 1 0 1 1 1];
-%Rotate it for gfdeconv. I know...I could have declared it like that from
-%the start.
-gx = rot90(gx);
-gx = rot90(gx);
+[~, upperBound] = size(mxArray);
 
-%Error correction polynomial. Remainder contains what we need.
-[~, r] = gfdeconv(mxArray, gx);
-if r == 0
-    r = [0 0 0 0 0 0 0 0 0 0];
+%Error correction polynomial. Remainder contains what we need. 
+%Perform until we have a remainder of 10
+%[~, r] = gfdeconv(mxArray, gx);
+while upperBound > 10
+    %pad generator
+    fake_gx = gx;
+    [~, otherBound] = size(mxArray);
+    for i = 1:1:otherBound-11
+        fake_gx(11+i) = 0;
+    end
+    
+    mxArray = xor(mxArray, fake_gx);
+    [~, var] = size(mxArray);
+    
+    %Remove the leading 0
+    for i = 1:1:var-10
+        if mxArray(1) == 0
+            mxArray(1) = [];
+        end
+    end
+    fake_gx = gx;
+    [~, upperBound] = size(mxArray); 
 end
-while length(r) < 10
-    r = [0, r];
-end
+
+% if r == 0
+%     r = [0 0 0 0 0 0 0 0 0 0];
+% end
+% while length(r) < 10
+%     r = [0, r];
+% end
+
 %If string make into array
 versionArray = zeros(1, length(asciiArrayVersion));
 for i = 1:length(asciiArrayVersion)
@@ -81,17 +102,14 @@ for i = 1:length(asciiArrayVersion)
 end
 
 %Put version and error correction together
-versionArray = rot90(versionArray);
-versionArray = rot90(versionArray);
-versionError = horzcat(r, versionArray);
+versionError = horzcat(versionArray, mxArray);
 
 %Masking
 mask = [1 0 1 0 1 0 0 0 0 0 1 0 0 1 0];
-mask = rot90(mask);
-mask = rot90(mask);
 
 finalArray = xor(mask, versionError);
-
+finalArray = rot90(finalArray);
+finalArray = rot90(finalArray);
 %Put it in the qr code
 formatCode = qrCode;
 
@@ -104,12 +122,12 @@ for i = 1:1:11
     elseif (i > 7 && i < 10)
         formatCode(i, 9) = finalArray(i-1);
     elseif (i == 10)
-        formatCode(i+4, 9) = 1;
+            formatCode(i+4, 9) = 1;
     elseif (i == 11)
         for n = 1:1:7
             formatCode(14+n, 9) = finalArray(8+n);
         end
-    end
+    end      
 end
 
 temp = rot90(finalArray);
@@ -127,7 +145,7 @@ for i = 1:1:11
         for n = 1:1:8
             formatCode(9, 13+n) = temp(7+n);
         end
-    end
+    end      
 end
 
 finalMx = zeros(29, 29);
