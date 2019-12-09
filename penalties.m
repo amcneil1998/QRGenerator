@@ -9,7 +9,6 @@ function score = penalties(matrix)
 score = zeros(1,8);
 
 for n = 1:8
-
     % Rule 1
         % The first rule gives the QR code a penalty for each group of five or more same-colored modules in a row (or column).
 
@@ -69,12 +68,13 @@ for n = 1:8
         % The third rule gives the QR code a large penalty if there are patterns that look similar to the finder patterns.
     score_3 = 0;
     % Horizontally
-    pattern1 = [0 1 0 0 0 1 0 1 1 1 1];
-    pattern2 = [1 1 1 1 0 1 0 0 0 1 0];
+    pattern1 = [1 0 1 1 1 0 1 0 0 0 0];
+    pattern2 = [0 0 0 0 1 0 1 1 1 0 1];
+   
     for h = 1:height
         idx1h = strfind(matrix(h,:,n),pattern1);
         idx2h = strfind(matrix(h,:,n),pattern2);
-        score_3 = score_3 + length(idx1h) + length(idx2h);
+        score_3 = score_3 + 40*nnz(idx1h) + 40*nnz(idx2h);
     end
     
     %Vertically
@@ -82,7 +82,7 @@ for n = 1:8
     for w = 1:width
         idx1v = strfind(matrix_t(w,:),pattern1);
         idx2v = strfind(matrix_t(w,:),pattern2);
-        score_3 = score_3 + length(idx1v) + length(idx2v);
+        score_3 = score_3 + 40*nnz(idx1v) + 40*nnz(idx2v);
     end
 
 
