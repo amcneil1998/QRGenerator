@@ -64,10 +64,7 @@ end
 maskTotal(maskTotal ~= 0) = change;
 maskTotal = mod(maskTotal + 1, 2);
 
-for bla = 1:8
-    figure(bla)
-imagesc(maskTotal(:,:,bla))
-end
+
 
 maskFormatted = maskTotal .*pattern();
 
