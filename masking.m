@@ -10,7 +10,7 @@ maskTotal = zeros(height,width,8);
 change = 1;
 noChange = 0;
 
-% Mask pattern 1: (row + column) mod 2 == change
+% Mask pattern 1: (row + column) mod 2 == 0
 for hh = 1:height
     for ww = 1:width
         maskTotal(hh,ww,1) = mod(hh+ww,2);
@@ -37,7 +37,7 @@ end
 % Mask pattern 5: ( floor(row / 2) + floor(column / 3) ) mod 2 == 0
 for hh = 1:height
     for ww = 1:width
-        maskTotal(hh, ww, 5) = mod(floor(hh/2) + floor(ww/2),2);
+        maskTotal(hh, ww, 5) = mod(floor(hh/2) + floor(ww/3),2);
     end
 end
 
@@ -48,23 +48,26 @@ for hh = 1:height
     end
 end
 
-% Mask pattern 7: ( ((row * column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
+% Mask pattern 7: ( ((row * column) mod 2) + (row * column) mod 3) ) mod 2 == 0
 for hh = 1:height
     for ww = 1:width
-        maskTotal(hh, ww, 7) = mod(hh * ww, 2) + mod(mod(hh * ww, 3), 2);
+        maskTotal(hh, ww, 7) = mod(mod(hh * ww, 2) + mod(hh * ww, 3), 2);
     end
 end
 
 % Mask pattern 8: ( ((row + column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
 for hh = 1:height
     for ww = 1:width
-        maskTotal(hh, ww, 8) = mod(mod(hh * ww, 2) + mod(hh * ww, 3), 2);
+        maskTotal(hh, ww, 8) = mod(mod(hh + ww, 2) + mod(hh * ww, 3), 2);
     end
 end
 maskTotal(maskTotal ~= 0) = change;
-maskTotal(maskTotal == 0) = noChange;
 maskTotal = mod(maskTotal + 1, 2);
 
+for bla = 1:8
+    figure(bla)
+imagesc(maskTotal(:,:,bla))
+end
 
 maskFormatted = maskTotal .*pattern();
 
